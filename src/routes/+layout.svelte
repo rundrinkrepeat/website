@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "$lib/app.css";
+  import AngledHeader from "$lib/components/templates/AngledHeader.svelte";
 </script>
 
-<slot />
+<AngledHeader angle={2}><slot /></AngledHeader>
