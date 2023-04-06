@@ -4,11 +4,14 @@
   import Logo_ from "$lib/mrc-berlin.svg";
   import "$lib/tailwind.css";
 
+  import SEO from "../atoms/SEO.svelte";
+
   const Logo = Logo_ as unknown as ComponentType;
 
   export let angle: number;
 </script>
 
+<SEO />
 <div
   style={`--angle: ${angle}; --sin: ${Math.sin((Math.PI / 180) * angle)}; --cos: ${Math.cos(
     (Math.PI / 180) * angle,
