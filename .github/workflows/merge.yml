@@ -1,0 +1,45 @@
+name: Bump Version
+on:
+  pull_request_target:
+    types:
+      - closed
+
+jobs:
+  bump-version:
+    name: Bump Version
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    env:
+      PR_BRANCH_REF: ${{ github.event.pull_request.head.ref }}
+      PR_BRANCH_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: PR Fetch Depth
+        run: echo "PR_FETCH_DEPTH=$(( ${{ github.event.pull_request.commits }} + 1 ))" >> "${GITHUB_ENV}"
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: ${{ env.PR_FETCH_DEPTH }}
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Bump version
+        shell: bash
+        run: |
+          npm version --no-git-tag-version $(echo ${PR_BRANCH_REF} | cut -d "/" -f 1 | sed 's/dependabot/patch/g')
+          echo NEW_VERSION=$(node -p "require('./package.json').version") >> $GITHUB_ENV
+      - name: Create Changelog
+        run: |
+          echo "Bump version to v${NEW_VERSION} (PR ${{ github.event.pull_request.html_url }})" > .GITHUB_MESSAGE
+          echo "" >> .GITHUB_MESSAGE
+          git log --reverse --pretty=format:"- %h %s" --reverse ${{ github.event.pull_request.base.sha }}..HEAD >> .GITHUB_MESSAGE
+      - name: Update repository
+        shell: bash
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          git commit -F .GITHUB_MESSAGE
+          git tag v${{ env.NEW_VERSION }} -F .GITHUB_MESSAGE
+          git push --atomic origin ${{ github.event.repository.default_branch }} v${{ env.NEW_VERSION }}
