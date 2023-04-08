@@ -19,7 +19,9 @@
 
 <section>
   <main>
-    <CalendarHeader bind:currentMonth {months} />
+    <div class="mb-4">
+      <CalendarHeader bind:currentMonth {months} />
+    </div>
     <CalendarMonth {currentMonth} />
   </main>
 </section>
