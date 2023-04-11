@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { Time } from "ical.js";
+  import ical from "ical.js";
 
   import CalendarHeader from "$lib/components/molecules/CalendarHeader.svelte";
   import CalendarMonth from "$lib/components/molecules/CalendarMonth.svelte";
+
+  const { Time } = ical;
 
   export let numMonths = 12;
 

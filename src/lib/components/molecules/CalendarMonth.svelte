@@ -1,16 +1,19 @@
 <script lang="ts">
-  import { Time } from "ical.js";
+  import ical from "ical.js";
+  import type { Time as TimeType } from "ical.js";
 
   import CalendarDay from "../atoms/CalendarDay.svelte";
 
-  export let currentMonth: Time;
+  const { Time } = ical;
+
+  export let currentMonth: TimeType;
   export let startOfWeek: number = Time.MONDAY;
 
   const format = new Intl.DateTimeFormat("en-US", {
     weekday: "short",
   });
 
-  let days: Time[] = [];
+  let days: TimeType[] = [];
   $: {
     const daysInMonth = Time.daysInMonth(currentMonth.month, currentMonth.year);
     days = Array.from(
