@@ -4,7 +4,7 @@
 
 <div class="mx-auto w-[65ch]">
   <div class="prose mb-8">
-    <h1>Running Calendar</h1>
+    <h1 class="font-knewave font-normal text-sky-600">Running Calendar</h1>
     <p>Enjoy browsing our social running calendar for the next twelve months.</p>
   </div>
   <Calendar />

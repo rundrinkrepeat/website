@@ -32,7 +32,9 @@
   }
 </script>
 
-<ol class="grid h-full grid-cols-[repeat(7,fit-content(3ch))] place-content-center gap-4">
+<ol
+  class="grid h-full grid-cols-[repeat(7,fit-content(3ch))] place-content-center gap-4 font-knewave"
+>
   {#each days.slice(0, 7) as day}
     <div class="text-center text-sky-400">{format.format(day.toJSDate())}</div>
   {/each}
