@@ -5,17 +5,28 @@
   import type { ComponentType } from "svelte";
   import { Hamburger } from "svelte-hamburgers";
   import { fly } from "svelte/transition";
+  import { Svrollbar } from "svrollbar";
 
+  import SEO from "$lib/components/atoms/SEO.svelte";
   import Logo_ from "$lib/mrc-berlin.svg";
   import "$lib/tailwind.css";
-
-  import SEO from "../atoms/SEO.svelte";
 
   const Logo = Logo_ as unknown as ComponentType;
 
   export let angle: number;
   export let menuAngle = 2 * angle;
+  $: constants = {
+    "--angle": angle,
+    "--sin": Math.sin((Math.PI / 180) * angle),
+    "--cos": Math.cos((Math.PI / 180) * angle),
+    "--menuAngle": menuAngle,
+    "--menuSin": Math.sin((Math.PI / 180) * menuAngle),
+    "--menuCos": Math.cos((Math.PI / 180) * menuAngle),
+  };
+
   let isMenuOpen = false;
+  let scrollViewport: Element;
+  let scrollContents: Element;
 
   $: if (browser) {
     const body = document.body;
@@ -37,27 +48,15 @@
 
 <SEO />
 <div
-  style={`--angle: ${angle}; --sin: ${Math.sin((Math.PI / 180) * angle)}; --cos: ${Math.cos(
-    (Math.PI / 180) * angle,
-  )}; --menuAngle: ${menuAngle}; --menuSin: ${Math.sin(
-    (Math.PI / 180) * menuAngle,
-  )}; --menuCos: ${Math.cos((Math.PI / 180) * menuAngle)}`}
+  style={Object.entries(constants)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(";")}
 >
-  <header class="head fixed z-20 flex justify-between border-b-4 border-sky-500 bg-sky-300">
-    <a href="/">
-      <Logo
-        class="ml-4 h-full p-4 transition-transform duration-500 hover:rotate-[360deg] hover:scale-105"
-      />
-    </a>
-    <div class="mr-4 self-end">
-      <Hamburger bind:open={isMenuOpen} --color="rgb(14 165 233)" type="elastic" />
-    </div>
-  </header>
   {#if isMenuOpen}
-    <nav class="absolute z-10 h-screen w-full overflow-hidden">
+    <nav class="fixed z-10 h-screen w-full overflow-hidden">
       <div
         transition:fly={{ delay: 200, duration: 750, y: "-100%" }}
-        class="menu flex items-center justify-center"
+        class="menu flex items-center justify-center bg-sky-300"
       >
         <div class="text-sky-500">
           <h1 class="mb-4 border-b border-b-sky-500 font-knewave text-3xl">Hello, Berlin!</h1>
@@ -74,19 +73,36 @@
       </div>
     </nav>
   {/if}
-  <main class="main mb-8 min-h-screen bg-sky-100">
-    <slot />
+  <header class="relative z-20 h-40">
+    <div class="head fixed flex justify-between border-b-4 border-sky-500 bg-sky-300">
+      <a href="/">
+        <Logo
+          class="ml-4 h-full p-4 transition-transform duration-500 hover:rotate-[360deg] hover:scale-105"
+        />
+      </a>
+      <div class="mr-4 self-end">
+        <Hamburger bind:open={isMenuOpen} --color="rgb(14 165 233)" type="elastic" />
+      </div>
+    </div>
+  </header>
+  <main class="absolute bottom-0 top-40 w-full bg-sky-200">
+    <div class="main-viewport h-full overflow-y-scroll" bind:this={scrollViewport}>
+      <div class="flex h-full grow flex-col" bind:this={scrollContents}>
+        <div class="grow">
+          <slot />
+        </div>
+        <footer class="border-t-2 border-sky-500 bg-sky-300 px-2 py-1 text-xs text-sky-600">
+          Made in Berlin, for Berlin
+        </footer>
+      </div>
+      <Svrollbar contents={scrollContents} viewport={scrollViewport} />
+    </div>
   </main>
-  <footer
-    class="text-sky-600; fixed bottom-0 w-full border-t-2 border-sky-500 bg-sky-300 px-2 py-1"
-  >
-    Made in Berlin, for Berlin
-  </footer>
 </div>
 
 <style lang="postcss">
   .head {
-    width: calc(var(--cos) * 100vw + var(--sin) * 10rem);
+    width: calc(var(--cos) * 100vw + 2 * var(--sin) * 10rem);
     height: calc(var(--sin) * 100vw + var(--cos) * 10rem);
     left: calc(-1 * var(--sin) * var(--cos) * 10rem);
     top: calc(-1 * var(--sin) * var(--cos) * 50vw);
@@ -99,11 +115,21 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(calc(var(--menuAngle) * 1deg));
-    padding-top: 13rem;
-    @apply absolute bg-sky-300;
+    padding-top: 0rem;
+    @apply absolute;
   }
 
-  .main {
-    padding-top: calc(10rem + var(--sin) / var(--cos) * 100vw);
+  .main-viewport {
+    padding-top: calc(var(--sin) / var(--cos) * 100vw);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    --svrollbar-thumb-width: 10px;
+    --svrollbar-thumb-background: linear-gradient(45deg, #ec4f27, orange);
+    --svrollbar-thumb-opacity: 1;
+    --svrollbar-thumb-radius: 0;
+  }
+
+  .main-viewport::-webkit-scrollbar {
+    display: none;
   }
 </style>
