@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { page } from "$app/stores";
   import "@fontsource/knewave";
   import type { ComponentType } from "svelte";
   import { Hamburger } from "svelte-hamburgers";
-  import { fly } from "svelte/transition";
   import { Svrollbar } from "svrollbar";
+
+  import { fly } from "svelte/transition";
+
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
 
   import SEO from "$lib/components/atoms/SEO.svelte";
   import Logo_ from "$lib/mrc-berlin.svg";
