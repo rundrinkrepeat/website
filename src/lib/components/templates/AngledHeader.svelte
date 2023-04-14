@@ -90,7 +90,7 @@
   <main class="absolute bottom-0 top-40 w-full bg-sky-200">
     <div class="main-viewport h-full overflow-y-scroll" bind:this={scrollViewport}>
       <div class="flex h-full grow flex-col" bind:this={scrollContents}>
-        <div class="grow">
+        <div class="grow px-2">
           <slot />
         </div>
         <footer class="border-t-2 border-sky-500 bg-sky-300 px-2 py-1 text-xs text-sky-600">
