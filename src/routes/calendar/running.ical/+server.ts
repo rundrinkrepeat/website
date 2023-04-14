@@ -1,6 +1,7 @@
-import { ICAL_URL, ISR_BYPASS_TOKEN } from "$env/static/private";
 import type { Config } from "@sveltejs/adapter-vercel";
 import { error } from "@sveltejs/kit";
+
+import { ICAL_URL, ISR_BYPASS_TOKEN } from "$env/static/private";
 
 import type { RequestHandler } from "./$types";
 
