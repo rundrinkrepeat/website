@@ -1,18 +1,20 @@
 <script lang="ts">
   import ical from "ical.js";
 
+  import type ICal from "$lib/calendar";
   import CalendarHeader from "$lib/components/molecules/CalendarHeader.svelte";
   import CalendarMonth from "$lib/components/molecules/CalendarMonth.svelte";
 
   const { Time } = ical;
 
   export let numMonths = 12;
+  export let calendar: ICal;
 
   const startDate = new Date();
   const startMonth = Time.fromJSDate(startDate, false).startOfMonth();
 
   $: currentMonth = Time.fromJSDate(startDate, false);
-  $: months = [...Array(numMonths).keys()].map((v, i) => {
+  $: months = [...Array(numMonths).keys()].map((v) => {
     const entry = startMonth.clone();
     entry.month += v;
     return entry;
@@ -54,7 +56,7 @@
       swipe = undefined;
     }
   };
-  const onTouchEnd = (e: SwipeTouchEvent) => {
+  const onTouchEnd = () => {
     if (!firstTouch) return;
     if (swipe !== undefined) {
       go(swipe == "left" ? 1 : -1);
@@ -79,7 +81,7 @@
         class:-translate-x-40={swipe == "left"}
         class="transition-transform"
       >
-        <CalendarMonth {currentMonth} />
+        <CalendarMonth {currentMonth} events={calendar.eventsForMonth(currentMonth)} />
       </div>
     </div>
   </main>
