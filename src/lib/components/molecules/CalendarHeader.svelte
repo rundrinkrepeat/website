@@ -18,7 +18,7 @@
   <button
     on:click={() => go(-1)}
     title="Previous"
-    class="h-10 rounded-md border border-sky-400 p-1 text-sky-400"
+    class="h-10 rounded-md border border-sky-400 p-1 text-sky-400 lg:h-14"
     class:inactive={atStart}
   >
     <Icon src={SkipPrevious} theme="twotone" />
@@ -27,7 +27,7 @@
   <button
     on:click={() => go(+1)}
     title="Next"
-    class="h-10 rounded-md border border-sky-400 p-1 text-sky-400"
+    class="h-10 rounded-md border border-sky-400 p-1 text-sky-400 lg:h-14"
     class:inactive={atEnd}
   >
     <Icon src={SkipNext} theme="twotone" />
