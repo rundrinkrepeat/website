@@ -1,5 +1,14 @@
+<script lang="ts" context="module">
+  export const contextKey = Symbol();
+  export type Selected = Writable<{ time: TimeType; event: EventType }[]>;
+</script>
+
 <script lang="ts">
   import ical from "ical.js";
+  import type { Event as EventType, Time as TimeType } from "ical.js";
+  import { setContext } from "svelte";
+
+  import { type Writable, writable } from "svelte/store";
 
   import type ICal from "$lib/calendar";
   import CalendarHeader from "$lib/components/molecules/CalendarHeader.svelte";
@@ -7,6 +16,7 @@
 
   const { Time } = ical;
 
+  export const selectedEvents: Selected = writable([]);
   export let numMonths = 12;
   export let calendar: ICal | undefined;
 
@@ -64,6 +74,8 @@
     firstTouch = undefined;
     swipe = undefined;
   };
+
+  setContext(contextKey, selectedEvents);
 </script>
 
 <section>
