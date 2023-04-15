@@ -9,7 +9,7 @@
 
   export let currentMonth: TimeType;
   export let startOfWeek: number = Time.MONDAY;
-  export let events: EventList;
+  export let events: EventList | undefined;
 
   const format = new Intl.DateTimeFormat("en-US", {
     weekday: "short",
@@ -25,6 +25,6 @@
     <div class="text-center text-sky-400">{format.format(day.toJSDate())}</div>
   {/each}
   {#each days as day}
-    <CalendarDay {day} {currentMonth} events={events.eventsForDay(day)} />
+    <CalendarDay {day} {currentMonth} events={events?.eventsForDay(day) || []} />
   {/each}
 </ol>

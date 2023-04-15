@@ -8,7 +8,7 @@
   const { Time } = ical;
 
   export let numMonths = 12;
-  export let calendar: ICal;
+  export let calendar: ICal | undefined;
 
   const startDate = new Date();
   const startMonth = Time.fromJSDate(startDate, false).startOfMonth();
@@ -67,7 +67,7 @@
 </script>
 
 <section>
-  <main>
+  <main class:blur-sm={calendar === undefined} class="transition-all duration-500">
     <div class="mb-4">
       <CalendarHeader bind:currentMonth {go} {atStart} {atEnd} />
     </div>
@@ -81,7 +81,7 @@
         class:-translate-x-40={swipe == "left"}
         class="transition-transform"
       >
-        <CalendarMonth {currentMonth} events={calendar.eventsForMonth(currentMonth)} />
+        <CalendarMonth {currentMonth} events={calendar?.eventsForMonth(currentMonth)} />
       </div>
     </div>
   </main>
