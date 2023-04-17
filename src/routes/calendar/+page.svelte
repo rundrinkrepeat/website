@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { fade } from "svelte/transition";
-
   import { browser } from "$app/environment";
 
   import ICal from "$lib/calendar";
@@ -22,21 +20,22 @@
 </script>
 
 <div class="mx-auto max-w-[65ch]">
-  <div class="prose mb-8">
-    <h1 class="font-knewave font-normal text-sky-600">Running Calendar</h1>
-    <p>Enjoy browsing our social running calendar for the next twelve months.</p>
+  <div class="prose">
+    <h1 class="mb-8 font-knewave font-normal text-sky-600">Running Calendar</h1>
   </div>
-  <Calendar calendar={ical} bind:selectedEvents />
-  <div class="prose mt-4">
-    <p>
-      You can also subscribe this calendar in ICAL format, just follow this link: <a
-        href="/calendar/running.ical">running.ical</a
-      >
-    </p>
-  </div>
-</div>
-{#if selectedEvents && $selectedEvents?.length}
-  <div transition:fade class="absolute left-0 top-0 z-10 h-full w-full bg-sky-300 p-4">
+  {#if !selectedEvents || !$selectedEvents?.length}
+    <div class="prose">
+      <p>Enjoy browsing our social running calendar for the next twelve months.</p>
+    </div>
+    <Calendar calendar={ical} bind:selectedEvents />
+    <div class="prose mt-4">
+      <p>
+        You can also subscribe this calendar in ICAL format, just follow this link: <a
+          href="/calendar/running.ical">running.ical</a
+        >
+      </p>
+    </div>
+  {:else}
     <EventListHeader
       date={$selectedEvents[0].time.toJSDate()}
       on:close={() => ($selectedEvents = [])}
@@ -44,5 +43,5 @@
     <div class="pt-4">
       <EventList events={$selectedEvents} />
     </div>
-  </div>
-{/if}
+  {/if}
+</div>
