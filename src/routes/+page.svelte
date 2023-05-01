@@ -1,5 +1,5 @@
-<h1>Prost from Mikkeller Running Club Berlin</h1>
+<script lang="ts">
+  import Page from "./calendar/+page.svelte";
+</script>
 
-<ul>
-  <a href="/calendar">Running Calendar</a>
-</ul>
+<Page />
