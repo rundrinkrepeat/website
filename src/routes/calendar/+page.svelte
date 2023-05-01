@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { toast } from "@zerodevx/svelte-toast";
   import { onMount } from "svelte";
 
   import { browser } from "$app/environment";
@@ -17,6 +18,15 @@
   });
 
   let selectedEvents: Selected;
+
+  const onCopyUrl = (e: MouseEvent) => {
+    if (!browser) {
+      return;
+    }
+    const target = e.target as HTMLAnchorElement;
+    navigator.clipboard.writeText(target.href);
+    toast.push("URL copied to clipbard!", { duration: 3000 });
+  };
 </script>
 
 <div class="mx-auto max-w-[65ch]">
@@ -30,9 +40,10 @@
     <Calendar calendar={ical} bind:selectedEvents />
     <div class="prose mt-4">
       <p>
-        You can also subscribe this calendar in ICAL format, just follow this link: <a
-          href="/calendar/running.ical">running.ical</a
-        >
+        You can also subscribe this calendar in ICAL format, click <a
+          href="/calendar/running.ical"
+          on:click|preventDefault={onCopyUrl}>this link</a
+        > to copy the URL to your clipbard to add to your calendar.
       </p>
     </div>
   {:else}
