@@ -82,9 +82,9 @@
           class="ml-4 h-full p-4 transition-transform duration-500 hover:rotate-[360deg] hover:scale-105"
         />
       </a>
-      <div class="mr-4 self-end">
+      <!--div class="mr-4 self-end">
         <Hamburger bind:open={isMenuOpen} --color="rgb(14 165 233)" type="elastic" />
-      </div>
+      </div-->
     </div>
   </header>
   <main class="absolute bottom-0 top-40 w-full bg-sky-200">
